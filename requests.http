@@ -1,0 +1,31 @@
+POST http://localhost:3000/api/products HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Iphone 4",
+    "description": "Un celular",
+    "image": "",
+    "stock": 10,
+    "category": "Electrónica",
+    "price": 155.15
+}
+
+### Actualizar producto
+PATCH http://localhost:3000/api/products HTTP/1.1
+content-type: application/json
+
+{
+    "id": 17,
+    "name": "Iphone SE",
+    "description": "Un celular",
+    "image": "",
+    "stock": 10,
+    "category": "Electrónica",
+    "price": 155.15
+}
+
+### Eliminar producto
+DELETE http://localhost:3000/api/products HTTP/1.1
+
+### Obtener lista de todos los productos
+Get http://localhost:3000/api/products HTTP/1.1

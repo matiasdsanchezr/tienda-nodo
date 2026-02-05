@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: rgb(222, 34, 34);
+  --color-secondary: #c5c5c5;
+  --color-bg-primary: #c9c9c9;
+  --color-bg-secondary: #dbdbdb;
+  --color-text-primary: black;
+
+  --color-dark-primary: #101828;
+  --color-dark-secondary: #1e2939;
+  --color-dark-bg-primary: #111217;
+  --color-dark-bg-secondary: #1e2939;
+  --color-dark-text-primary: white;
+
+  --color-button-secondary: #2c2c2c;
+  --color-button-secondary-hover: #3c3c3c;
+  --color-button-secondary-active: #1c1c1c;
+
+  --color-state-success: #2ecc71;
+  --color-state-warning: #f39c12;
+  --color-state-error: #e74c3c;
+  --color-state-info: #3498db;
+
+  --color-shadow-soft: rgba(0, 0, 0, 0.3);
+  --color-shadow-medium: rgba(0, 0, 0, 0.5);
+  --color-shadow-intense: rgba(0, 0, 0, 0.7);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 
+           outline-none transition-all duration-200 placeholder:text-gray-400
+           focus:border-blue-600 focus:ring-1 focus:ring-blue-600
+           disabled:cursor-not-allowed disabled:opacity-50
+           dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500
+           dark:focus:border-blue-500 dark:focus:ring-blue-500;
+  }
+
+  /* Opcional: Estilo base para el botón también, ya que aparece en tu código */
+  .button {
+    @apply flex items-center justify-center font-medium text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  }
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* Scroll-bar */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+  background: linear-gradient(
+    to bottom,
+    #b1b1b1 80px,
+    #dadbd6 80px,
+    #dadbd6 100%
+  );
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 0.815rem;
+  background-color: #484845;
+}
