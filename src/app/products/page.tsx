@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 
 type SortOption =
   | "price-asc"
@@ -40,7 +40,7 @@ type CartItem = {
 
 const categories = ["Todas", "Electrónica", "Hogar", "Deportes", "Moda"];
 
-const ProductsPage = () => {
+const ProductsPageContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -490,6 +490,29 @@ const ProductsPage = () => {
         )}
       </div>
     </main>
+  );
+};
+
+// Loading fallback component
+const ProductsPageLoading = () => {
+  return (
+    <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+// Main export with Suspense boundary
+const ProductsPage = () => {
+  return (
+    <Suspense fallback={<ProductsPageLoading />}>
+      <ProductsPageContent />
+    </Suspense>
   );
 };
 
