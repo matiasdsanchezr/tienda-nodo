@@ -1,100 +1,25 @@
-"use client";
 import { AddToCart } from "@/components/add-to-cart";
+import { getCartItems } from "@/lib/services/cart";
+import { getProduct } from "@/lib/services/product";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
-export interface Product {
-  name: string;
-  id: number;
-  description: string;
-  image: string;
-  category: string;
-  price: string;
-  stock: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+const ProductDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+  const product = await getProduct(id);
+  const cartItems = await getCartItems();
 
-type CartItem = {
-  id: number;
-  quantity: number;
-  unitPrice: string;
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-    quantity: number;
-    stock: number;
-  };
-};
-
-const ProductDetailPage = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch producto
-        const res = await fetch(`/api/products/${id}`);
-        if (!res.ok) throw new Error("Error al cargar el producto");
-        const data: Product = await res.json();
-        setProduct(data);
-
-        // Fetch carrito
-        const cartResponse = await fetch("/api/cart/items");
-        if (!cartResponse.ok) throw new Error("Error al cargar el carrito");
-        const cartData = await cartResponse.json();
-        setCartItems(cartData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
-
-  // Verificar si un producto está en el carrito
   const isProductInCart = (productId: number) => {
     return cartItems.some((item) => item.product.id == productId);
   };
 
-  if (loading) {
-    return (
-      <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
-        <div className="container mx-auto px-4 py-8">
-          <p>Cargando producto...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
-        <div className="container mx-auto px-4 py-8">
-          <p className="text-red-600">{error}</p>
-          <Link href="/products" className="text-blue-600 hover:underline">
-            Volver a la lista de productos
-          </Link>
-        </div>
-      </main>
-    );
-  }
-
   if (!product) {
-    return null;
+    redirect("/products");
   }
 
   const formattedPrice = Number(product.price).toLocaleString("es-ar", {
@@ -124,7 +49,7 @@ const ProductDetailPage = () => {
                 alt={product.name}
                 fill
                 className="object-contain p-4"
-                priority // Prioridad para LCP (Largest Contentful Paint)
+                priority
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             ) : (
@@ -167,14 +92,11 @@ const ProductDetailPage = () => {
                   {formattedPrice}
                 </span>
               </div>
-
-              {/* Inyectamos el componente cliente interactivo */}
               <AddToCart
                 productId={product.id}
                 stock={product.stock}
                 initialInCart={isProductInCart(product.id)}
               />
-
               <div className="flex items-center gap-2 text-xs text-gray-500 mt-6">
                 <span>SKU: {product.id}</span>
                 <span>·</span>

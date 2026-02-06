@@ -1,4 +1,5 @@
 "use client";
+import { AddToCart } from "@/components/add-to-cart";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -47,10 +48,6 @@ const ProductsPageContent = () => {
 
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [addingToCart, setAddingToCart] = useState<number | null>(null);
-
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || ""
   );
@@ -78,28 +75,22 @@ const ProductsPageContent = () => {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // Fetch productos y carrito al cargar
+  // Fetch productos y carrito
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-
-        // Fetch productos
         const productsResponse = await fetch("/api/products");
         if (!productsResponse.ok)
           throw new Error("Error al cargar los productos");
         const productsData = await productsResponse.json();
         setAllProducts(productsData);
 
-        // Fetch carrito
         const cartResponse = await fetch("/api/cart/items");
         if (!cartResponse.ok) throw new Error("Error al cargar el carrito");
         const cartData = await cartResponse.json();
         setCartItems(cartData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido");
-      } finally {
-        setLoading(false);
+        console.error(err);
       }
     };
     fetchData();
@@ -111,32 +102,8 @@ const ProductsPageContent = () => {
     setCurrentPage(Number(searchParams.get("page")) || 1);
   }, [searchParams]);
 
-  // Verificar si un producto está en el carrito
   const isProductInCart = (productId: number) => {
     return cartItems.some((item) => item.product.id === productId);
-  };
-
-  // Verificar el estado del botón
-  const getButtonState = (product: Product) => {
-    if (product.stock === 0) {
-      return {
-        disabled: true,
-        text: "Sin stock",
-        className: "bg-gray-400 cursor-not-allowed",
-      };
-    }
-    if (isProductInCart(product.id)) {
-      return {
-        disabled: true,
-        text: "En carrito",
-        className: "bg-green-600 cursor-not-allowed",
-      };
-    }
-    return {
-      disabled: false,
-      text: "Agregar",
-      className: "bg-blue-600 hover:bg-blue-700",
-    };
   };
 
   // Filtrar y ordenar productos
@@ -182,36 +149,6 @@ const ProductsPageContent = () => {
   // Resetear a página 1 cuando cambian filtros
   const handleFilterChange = () => {
     setCurrentPage(1);
-  };
-
-  // Agregar al carrito
-  const handleAddCartItem = async (productId: number) => {
-    try {
-      setAddingToCart(productId);
-      const response = await fetch(`/api/cart/items`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId, quantity: 1 }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al agregar al carrito");
-      }
-
-      // Actualizar el estado del carrito
-      const cartResponse = await fetch("/api/cart/items");
-      if (cartResponse.ok) {
-        const cartData = await cartResponse.json();
-        setCartItems(cartData);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
-      alert("No se pudo agregar el producto al carrito");
-    } finally {
-      setAddingToCart(null);
-    }
   };
 
   return (
@@ -326,7 +263,6 @@ const ProductsPageContent = () => {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
               {paginatedProducts.map((product) => {
-                const buttonState = getButtonState(product);
                 return (
                   <div
                     key={product.id}
@@ -392,22 +328,11 @@ const ProductsPageContent = () => {
                       </div>
                     </Link>
                     <div className="px-4 pb-4">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (!buttonState.disabled) {
-                            handleAddCartItem(product.id);
-                          }
-                        }}
-                        className={`button w-full ${buttonState.className} text-white py-2 px-4 rounded transition duration-200 text-sm font-semibold`}
-                        disabled={
-                          buttonState.disabled || addingToCart === product.id
-                        }
-                      >
-                        {addingToCart === product.id
-                          ? "Agregando..."
-                          : buttonState.text}
-                      </button>
+                      <AddToCart
+                        productId={product.id}
+                        stock={product.stock}
+                        initialInCart={isProductInCart(product.id)}
+                      />
                     </div>
                   </div>
                 );
@@ -493,7 +418,6 @@ const ProductsPageContent = () => {
   );
 };
 
-// Loading fallback component
 const ProductsPageLoading = () => {
   return (
     <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
@@ -507,7 +431,6 @@ const ProductsPageLoading = () => {
   );
 };
 
-// Main export with Suspense boundary
 const ProductsPage = () => {
   return (
     <Suspense fallback={<ProductsPageLoading />}>

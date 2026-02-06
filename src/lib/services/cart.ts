@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+import { auth } from "../auth";
 import { getOrCreateActiveCart } from "../cart";
 import { prisma } from "../prisma";
 
@@ -49,3 +51,13 @@ export async function addToCart({
 
   return cartItem;
 }
+
+export const getCartItems = async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session || !session.user) {
+    throw new Error("No autenticado");
+  }
+
+  const cart = await getOrCreateActiveCart(session.user.id);
+  return cart.items.map((item) => ({ ...item, id: item.id.toString() }));
+};
