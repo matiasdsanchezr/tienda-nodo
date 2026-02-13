@@ -109,7 +109,7 @@ const ContactPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {/* Facebook */}
             <Link
-              href="https://facebook.com/tutienda"
+              href="https://facebook.com/tiendanodo"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center p-6 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-800 transition-all duration-200 group"
@@ -125,7 +125,7 @@ const ContactPage = () => {
 
             {/* Instagram */}
             <Link
-              href="https://instagram.com/tutienda"
+              href="https://instagram.com/tiendanodo"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center p-6 rounded-lg hover:bg-pink-50 dark:hover:bg-gray-800 transition-all duration-200 group"
@@ -157,7 +157,7 @@ const ContactPage = () => {
 
             {/* Twitter/X */}
             <Link
-              href="https://twitter.com/tutienda"
+              href="https://twitter.com/tiendanodo"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center p-6 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-800 transition-all duration-200 group"
@@ -224,7 +224,7 @@ const ContactPage = () => {
             ></iframe>
           </div>
           <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-            Estamos ubicados en el centro de La Puerta, a pocas cuadras de la
+            Estamos ubicados en el centro de Catamarca, a pocas cuadras de la
             plaza principal
           </p>
         </div>

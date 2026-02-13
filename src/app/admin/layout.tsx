@@ -1,9 +1,9 @@
-import { RoleGate } from "@/components/ui/role-gate";
+import { ProtectedRoute } from "@/components/ui/protected-route";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <RoleGate allowedRoles={["admin"]}>{children}</RoleGate>;
+  return <ProtectedRoute allowedRoles={["admin"]}>{children}</ProtectedRoute>;
 }

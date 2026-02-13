@@ -30,14 +30,14 @@ export type CartItemAvgAggregateOutputType = {
   id: number | null
   productId: number | null
   quantity: number | null
-  unitPrice: runtime.Decimal | null
+  unitPrice: number | null
 }
 
 export type CartItemSumAggregateOutputType = {
   id: bigint | null
   productId: number | null
   quantity: number | null
-  unitPrice: runtime.Decimal | null
+  unitPrice: number | null
 }
 
 export type CartItemMinAggregateOutputType = {
@@ -45,7 +45,7 @@ export type CartItemMinAggregateOutputType = {
   cartId: string | null
   productId: number | null
   quantity: number | null
-  unitPrice: runtime.Decimal | null
+  unitPrice: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,7 +55,7 @@ export type CartItemMaxAggregateOutputType = {
   cartId: string | null
   productId: number | null
   quantity: number | null
-  unitPrice: runtime.Decimal | null
+  unitPrice: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -208,7 +208,7 @@ export type CartItemGroupByOutputType = {
   cartId: string
   productId: number
   quantity: number
-  unitPrice: runtime.Decimal
+  unitPrice: number
   createdAt: Date
   updatedAt: Date
   _count: CartItemCountAggregateOutputType | null
@@ -241,7 +241,7 @@ export type CartItemWhereInput = {
   cartId?: Prisma.StringFilter<"CartItem"> | string
   productId?: Prisma.IntFilter<"CartItem"> | number
   quantity?: Prisma.IntFilter<"CartItem"> | number
-  unitPrice?: Prisma.DecimalFilter<"CartItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFilter<"CartItem"> | number
   createdAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
   cart?: Prisma.XOR<Prisma.CartScalarRelationFilter, Prisma.CartWhereInput>
@@ -269,7 +269,7 @@ export type CartItemWhereUniqueInput = Prisma.AtLeast<{
   cartId?: Prisma.StringFilter<"CartItem"> | string
   productId?: Prisma.IntFilter<"CartItem"> | number
   quantity?: Prisma.IntFilter<"CartItem"> | number
-  unitPrice?: Prisma.DecimalFilter<"CartItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFilter<"CartItem"> | number
   createdAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
   cart?: Prisma.XOR<Prisma.CartScalarRelationFilter, Prisma.CartWhereInput>
@@ -299,7 +299,7 @@ export type CartItemScalarWhereWithAggregatesInput = {
   cartId?: Prisma.StringWithAggregatesFilter<"CartItem"> | string
   productId?: Prisma.IntWithAggregatesFilter<"CartItem"> | number
   quantity?: Prisma.IntWithAggregatesFilter<"CartItem"> | number
-  unitPrice?: Prisma.DecimalWithAggregatesFilter<"CartItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntWithAggregatesFilter<"CartItem"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CartItem"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CartItem"> | Date | string
 }
@@ -307,7 +307,7 @@ export type CartItemScalarWhereWithAggregatesInput = {
 export type CartItemCreateInput = {
   id?: bigint | number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
   cart: Prisma.CartCreateNestedOneWithoutItemsInput
@@ -319,7 +319,7 @@ export type CartItemUncheckedCreateInput = {
   cartId: string
   productId: number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -327,7 +327,7 @@ export type CartItemUncheckedCreateInput = {
 export type CartItemUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cart?: Prisma.CartUpdateOneRequiredWithoutItemsNestedInput
@@ -339,7 +339,7 @@ export type CartItemUncheckedUpdateInput = {
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,7 +349,7 @@ export type CartItemCreateManyInput = {
   cartId: string
   productId: number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -357,7 +357,7 @@ export type CartItemCreateManyInput = {
 export type CartItemUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,7 +367,7 @@ export type CartItemUncheckedUpdateManyInput = {
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -526,7 +526,7 @@ export type BigIntFieldUpdateOperationsInput = {
 export type CartItemCreateWithoutProductInput = {
   id?: bigint | number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
   cart: Prisma.CartCreateNestedOneWithoutItemsInput
@@ -536,7 +536,7 @@ export type CartItemUncheckedCreateWithoutProductInput = {
   id?: bigint | number
   cartId: string
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -575,7 +575,7 @@ export type CartItemScalarWhereInput = {
   cartId?: Prisma.StringFilter<"CartItem"> | string
   productId?: Prisma.IntFilter<"CartItem"> | number
   quantity?: Prisma.IntFilter<"CartItem"> | number
-  unitPrice?: Prisma.DecimalFilter<"CartItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFilter<"CartItem"> | number
   createdAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartItem"> | Date | string
 }
@@ -583,7 +583,7 @@ export type CartItemScalarWhereInput = {
 export type CartItemCreateWithoutCartInput = {
   id?: bigint | number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutCartItemsInput
@@ -593,7 +593,7 @@ export type CartItemUncheckedCreateWithoutCartInput = {
   id?: bigint | number
   productId: number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -628,7 +628,7 @@ export type CartItemCreateManyProductInput = {
   id?: bigint | number
   cartId: string
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -636,7 +636,7 @@ export type CartItemCreateManyProductInput = {
 export type CartItemUpdateWithoutProductInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cart?: Prisma.CartUpdateOneRequiredWithoutItemsNestedInput
@@ -646,7 +646,7 @@ export type CartItemUncheckedUpdateWithoutProductInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -655,7 +655,7 @@ export type CartItemUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -664,7 +664,7 @@ export type CartItemCreateManyCartInput = {
   id?: bigint | number
   productId: number
   quantity?: number
-  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -672,7 +672,7 @@ export type CartItemCreateManyCartInput = {
 export type CartItemUpdateWithoutCartInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutCartItemsNestedInput
@@ -682,7 +682,7 @@ export type CartItemUncheckedUpdateWithoutCartInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -691,7 +691,7 @@ export type CartItemUncheckedUpdateManyWithoutCartInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -769,7 +769,7 @@ export type $CartItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     cartId: string
     productId: number
     quantity: number
-    unitPrice: runtime.Decimal
+    unitPrice: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["cartItem"]>
@@ -1201,7 +1201,7 @@ export interface CartItemFieldRefs {
   readonly cartId: Prisma.FieldRef<"CartItem", 'String'>
   readonly productId: Prisma.FieldRef<"CartItem", 'Int'>
   readonly quantity: Prisma.FieldRef<"CartItem", 'Int'>
-  readonly unitPrice: Prisma.FieldRef<"CartItem", 'Decimal'>
+  readonly unitPrice: Prisma.FieldRef<"CartItem", 'Int'>
   readonly createdAt: Prisma.FieldRef<"CartItem", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CartItem", 'DateTime'>
 }

@@ -1,11 +1,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createProduct } from "@/lib/services/product";
 import { ProductPostSchema } from "@/lib/validations/product";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod/v4";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const allProducts = await prisma.product.findMany();
   return NextResponse.json(allProducts, {
     status: 200,
@@ -16,7 +17,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
-
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ status: 401 });
     }
@@ -32,16 +32,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await prisma.product.create({
-      data: {
-        ...validation.data,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+    const product = await createProduct({
+      ...validation.data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     return NextResponse.json(
-      { message: "Producto registrado" },
+      { message: "Producto registrado", product },
       { status: 201 }
     );
   } catch (error) {

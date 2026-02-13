@@ -1,20 +1,20 @@
 "use client";
+import { addToCartAction } from "@/lib/actions/cart";
 import { useActionState } from "react";
-import { addToCartAction } from "@/lib/actions"; // Importa tu server action
 
 interface AddToCartProps {
   productId: number;
   stock: number;
-  initialInCart: boolean;
+  isInCart: boolean;
 }
 
-export function AddToCart({ productId, stock, initialInCart }: AddToCartProps) {
-  const [state, formAction, isPending] = useActionState(addToCartAction, null);
+export function AddToCart({ productId, stock, isInCart }: AddToCartProps) {
+  const [state, formAction, isPending] = useActionState(addToCartAction, {
+    message: "",
+    success: false,
+  });
 
-  const isOutOfStock = stock === 0;
-  const isInCart = initialInCart || state?.success;
-
-  if (isOutOfStock) {
+  if (stock === 0) {
     return (
       <button
         disabled
@@ -25,7 +25,7 @@ export function AddToCart({ productId, stock, initialInCart }: AddToCartProps) {
     );
   }
 
-  if (isInCart) {
+  if (isInCart || state?.success) {
     return (
       <button
         disabled

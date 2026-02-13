@@ -55,9 +55,32 @@ export async function addToCart({
 export const getCartItems = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session || !session.user) {
-    throw new Error("No autenticado");
+    return [];
   }
 
   const cart = await getOrCreateActiveCart(session.user.id);
   return cart.items.map((item) => ({ ...item, id: item.id.toString() }));
+};
+
+export const clearCart = async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session || !session.user) {
+    throw new Error("No autenticado");
+  }
+
+  const cart = await getOrCreateActiveCart(session.user.id);
+  if (cart.lockedAt) {
+    throw new Error("Cart is locked for checkout");
+  }
+
+  const result = await prisma.cartItem.deleteMany({
+    where: {
+      cartId: cart.id,
+    },
+  });
+
+  return {
+    success: true,
+    count: result.count,
+  };
 };

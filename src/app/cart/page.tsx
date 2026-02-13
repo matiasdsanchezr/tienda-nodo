@@ -1,146 +1,46 @@
-"use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { getCartItems } from "@/lib/services/cart";
 import Image from "next/image";
+import Link from "next/link";
 import {
+  FiArrowLeft,
+  FiCreditCard,
+  FiPackage,
   FiShoppingCart,
   FiTrash2,
-  FiPlus,
-  FiMinus,
-  FiArrowLeft,
-  FiPackage,
   FiTruck,
-  FiCreditCard,
 } from "react-icons/fi";
 import { IoCheckmarkCircle } from "react-icons/io5";
+import { ClearCart } from "./_components/clear-cart";
+import { QuantityControls } from "./_components/quantity-controls";
 
-type CartItem = {
-  id: number;
-  quantity: number;
-  unitPrice: string;
-  product: {
-    id: number;
-    name: string;
-    price: string;
-    image: string;
-    category: string;
-    quantity: number;
-    stock: number;
-  };
-};
-
-const CartPage = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [updatingItem, setUpdatingItem] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/cart/items");
-        if (!response.ok)
-          throw new Error("Error al cargar los productos del carrito");
-        const data = await response.json();
-        console.log(data);
-        setCartItems(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCartItems();
-  }, []);
+const CartPage = async () => {
+  const cartItems = await getCartItems();
+  // const [error, setError] = useState<string | null>(null);
 
   // Calcular totales
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + Number(item.unitPrice) * item.quantity,
+    (sum, item) => sum + (item.unitPrice / 100) * item.quantity,
     0
   );
   const shipping = subtotal > 50000 ? 0 : 3000;
   const total = subtotal + shipping;
 
-  // Actualizar cantidad
-  const updateQuantity = async (id: number, newQuantity: number) => {
-    const item = cartItems.find((item) => item.id === id);
-    if (!item) return;
-
-    if (newQuantity < 1) {
-      removeItem(id);
-      return;
-    }
-
-    if (newQuantity > item.product.stock) {
-      alert(`Solo hay ${item.product.stock} unidades disponibles`);
-      return;
-    }
-
-    setUpdatingItem(id);
-    try {
-      await fetch(`/api/cart/items/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quantity: newQuantity }),
-      });
-
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
-    } finally {
-      setUpdatingItem(null);
-    }
-  };
-
-  // Eliminar item
-  const removeItem = async (itemId: number) => {
-    if (!confirm("¿Deseas eliminar este producto del carrito?")) return;
-    setLoading(true);
-    try {
-      await fetch(`/api/cart/items/${itemId}`, { method: "DELETE" });
-      setCartItems((prev) => prev.filter((item) => item.id !== itemId));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
-    }
-    setLoading(false);
-  };
-
-  // Vaciar carrito
-  const clearCart = async () => {
-    if (!confirm("¿Deseas vaciar todo el carrito?")) return;
-    setLoading(true);
-    try {
-      await fetch("/api/cart/items", { method: "DELETE" });
-      setCartItems([]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
-    }
-    setLoading(false);
-  };
-
-  if (loading && cartItems.length === 0) {
-    return (
-      <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="text-center">
-              <FiShoppingCart className="mx-auto text-6xl text-gray-400 mb-4 animate-pulse" />
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                Cargando carrito...
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  // if (loading && cartItems.length === 0) {
+  //   return (
+  //     <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
+  //       <div className="container mx-auto px-4 py-8">
+  //         <div className="flex items-center justify-center min-h-[60vh]">
+  //           <div className="text-center">
+  //             <FiShoppingCart className="mx-auto text-6xl text-gray-400 mb-4 animate-pulse" />
+  //             <p className="text-xl text-gray-600 dark:text-gray-400">
+  //               Cargando carrito...
+  //             </p>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </main>
+  //   );
+  // }
 
   return (
     <main className="flex-1 bg-bg-primary dark:bg-dark-bg-primary min-h-screen">
@@ -190,14 +90,7 @@ const CartPage = () => {
                     <FiPackage className="text-blue-600" />
                     Productos ({cartItems.length})
                   </h2>
-                  <button
-                    onClick={clearCart}
-                    className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm font-semibold transition duration-200 hover:bg-red-50 dark:hover:bg-red-900/20 px-3 py-2 rounded-lg"
-                    disabled={loading}
-                  >
-                    <FiTrash2 />
-                    Vaciar carrito
-                  </button>
+                  <ClearCart />
                 </div>
 
                 <div className="flex flex-col gap-4">
@@ -252,43 +145,14 @@ const CartPage = () => {
 
                         <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
                           {/* Controles de cantidad */}
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
-                              disabled={updatingItem === item.id}
-                              className="bg-gray-200 dark:bg-gray-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 w-9 h-9 rounded-lg flex items-center justify-center transition duration-200 disabled:opacity-50"
-                            >
-                              <FiMinus />
-                            </button>
-                            <input
-                              type="number"
-                              min="1"
-                              max={item.product.stock}
-                              value={item.quantity}
-                              onChange={(e) =>
-                                updateQuantity(item.id, Number(e.target.value))
-                              }
-                              className="input w-16 text-center font-semibold"
-                              disabled={updatingItem === item.id}
-                            />
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              disabled={updatingItem === item.id}
-                              className="bg-gray-200 dark:bg-gray-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 w-9 h-9 rounded-lg flex items-center justify-center transition duration-200 disabled:opacity-50"
-                            >
-                              <FiPlus />
-                            </button>
-                          </div>
+                          <QuantityControls cartItems={cartItems} item={item} />
 
                           {/* Precio */}
                           <div className="text-right">
                             <p className="text-xl font-bold text-blue-600">
                               {(
-                                Number(item.unitPrice) * item.quantity
+                                (item.unitPrice / 100) *
+                                item.quantity
                               ).toLocaleString("es-ar", {
                                 style: "currency",
                                 currency: "ARS",
@@ -296,7 +160,7 @@ const CartPage = () => {
                               })}
                             </p>
                             <p className="text-sm text-gray-500">
-                              {Number(item.unitPrice).toLocaleString("es-ar", {
+                              {(item.unitPrice / 100).toLocaleString("es-ar", {
                                 style: "currency",
                                 currency: "ARS",
                                 minimumFractionDigits: 2,
@@ -309,10 +173,10 @@ const CartPage = () => {
 
                       {/* Botón eliminar */}
                       <button
-                        onClick={() => removeItem(item.id)}
+                        // onClick={() => removeItem(item.id)}
                         className="text-red-600 hover:text-white hover:bg-red-600 self-start sm:self-center transition duration-200 w-9 h-9 rounded-lg flex items-center justify-center"
                         title="Eliminar producto"
-                        disabled={loading}
+                        // disabled={loading}
                       >
                         <FiTrash2 className="text-xl" />
                       </button>
@@ -409,12 +273,12 @@ const CartPage = () => {
                 {/* Botón de checkout */}
                 <button
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2 mb-3"
-                  disabled={loading}
-                  onClick={() =>
-                    alert(
-                      "Pedido generado (Plataforma de pago no implementada)"
-                    )
-                  }
+                  // disabled={loading}
+                  // onClick={() =>
+                  //   alert(
+                  //     "Pedido generado (Plataforma de pago no implementada)"
+                  //   )
+                  // }
                 >
                   <FiCreditCard />
                   Proceder al pago

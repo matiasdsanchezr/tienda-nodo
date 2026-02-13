@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, Product } from "@/app/generated/prisma/client";
+import { PrismaClient, Product } from "@/app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
@@ -9,7 +9,7 @@ type ProductData = Omit<Product, "id">;
 const allProducts: ProductData[] = [
   {
     name: "Apple iPhone 16 Pro Max (256 GB) - Titanio negro",
-    price: new Prisma.Decimal(2039999),
+    price: 2039999 * 100,
     image:
       "https://images.fravega.com/f1000/0c061d21343235404877b19710175c91.jpg",
     category: "Electrónica",
@@ -21,7 +21,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: 'Notebook Samsung Galaxy Book 3 Pro 14" Intel Core i7 32 GB 1TB',
-    price: new Prisma.Decimal(2649999),
+    price: 2649999 * 100,
     image:
       "https://images.fravega.com/f300/07b56857e8c67e6f7d7ad452f169a8ae.jpg.webp",
     category: "Electrónica",
@@ -33,7 +33,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Auriculares JBL Bluetooth Tune 770NC Negro",
-    price: new Prisma.Decimal(182849),
+    price: 182849 * 100,
     image:
       "https://images.fravega.com/f300/57a1e7980963228991d6de110f704ae1.jpg.webp",
     category: "Electrónica",
@@ -45,7 +45,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Cafetera Espresso Peabody Digital PE-CED5000IX",
-    price: new Prisma.Decimal(159999),
+    price: 159999 * 100,
     image:
       "https://images.fravega.com/f300/5991ef166ec3b3a20f69b2b8f7dc7092.jpg.webp",
     category: "Hogar",
@@ -57,7 +57,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Aspiradora Robot Philco RVCF25PI con Trapeadora",
-    price: new Prisma.Decimal(229999),
+    price: 229999 * 100,
     image:
       "https://images.fravega.com/f300/4ee295ed26af6372907764483613938e.jpg.webp",
     category: "Hogar",
@@ -69,7 +69,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Bicicleta Mountain Bike SLP 10 Pro Rodado 29” T18",
-    price: new Prisma.Decimal(289999),
+    price: 289999 * 100,
     image:
       "https://images.fravega.com/f300/4f4d19b5f5c69f15ed484548c6c8a1f3.jpg.webp",
     category: "Deportes",
@@ -80,7 +80,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Bota Trekking Patria Trek Negro 44",
-    price: new Prisma.Decimal(125780),
+    price: 125780 * 100,
     image:
       "https://images.fravega.com/f300/087645f25073c6cb2bc4d468685ce41d.jpg.webp",
     category: "Deportes",
@@ -92,7 +92,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Smartwatch Samsung Galaxy Fit 3 Dark Gray",
-    price: new Prisma.Decimal(114999),
+    price: 114999 * 100,
     image:
       "https://images.fravega.com/f300/2d4093bb735d33e3fe8be3540f215eaa.jpg.webp",
     category: "Electrónica",
@@ -104,7 +104,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Mochila Hidratante Gadnic Running",
-    price: new Prisma.Decimal(64999),
+    price: 64999 * 100,
     image:
       "https://images.fravega.com/f300/5d4123361f7ddc44bde4cc2035a8e477.jpg.webp",
     category: "Deportes",
@@ -116,7 +116,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Licuadora Peabody PE-LN810B 800W Blanco",
-    price: new Prisma.Decimal(89999),
+    price: 89999 * 100,
     image:
       "https://images.fravega.com/f300/2c6272699be2073b5fab2dbbb194baa2.jpg.webp",
     category: "Hogar",
@@ -128,7 +128,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Cámara Canon EOS R100 KIT 18-45",
-    price: new Prisma.Decimal(1382249.01),
+    price: 1382249.01 * 100,
     image:
       "https://images.fravega.com/f300/e57cdf959a8ce367333479aef2452976.jpg.webp",
     category: "Electrónica",
@@ -140,7 +140,7 @@ const allProducts: ProductData[] = [
   },
   {
     name: "Kit Mancuernas + Barra Trexa GBFW261 20Kg Tope A Rosca Discos Pesas",
-    price: new Prisma.Decimal(49999),
+    price: 49999 * 100,
     image:
       "https://images.fravega.com/f300/46dbf709e5f0ab7b22a2319221174f95.jpg.webp",
     category: "Deportes",

@@ -1,16 +1,28 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { addToCart } from "@/lib/services/cart";
+import { auth } from "../auth";
+import { addToCart } from "../services/cart";
+import { ActionResponse } from "./action-state";
 
-export type ActionState = {
-  success: boolean;
-  message: string;
-} | null;
+export async function clearCartAction() {
+  try {
+    // if (!response.ok) {
+    //   throw new Error("Error al vaciar el carrito");
+    // }
+
+    // Revalida la página para reflejar los cambios
+    revalidatePath("/cart");
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Error al vaciar el carrito" };
+  }
+}
 
 export async function addToCartAction(
-  prevState: ActionState,
+  prevState: ActionResponse,
   productId: number
 ) {
   try {

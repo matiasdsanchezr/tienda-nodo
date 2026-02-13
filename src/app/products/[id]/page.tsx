@@ -11,7 +11,7 @@ const ProductDetailPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const product = await getProduct(id);
+  const product = await getProduct(Number(id));
   const cartItems = await getCartItems();
 
   const isProductInCart = (productId: number) => {
@@ -22,7 +22,7 @@ const ProductDetailPage = async ({
     redirect("/products");
   }
 
-  const formattedPrice = Number(product.price).toLocaleString("es-ar", {
+  const formattedPrice = (product.price / 100).toLocaleString("es-ar", {
     style: "currency",
     currency: "ARS",
     minimumFractionDigits: 2,
@@ -95,7 +95,7 @@ const ProductDetailPage = async ({
               <AddToCart
                 productId={product.id}
                 stock={product.stock}
-                initialInCart={isProductInCart(product.id)}
+                isInCart={isProductInCart(product.id)}
               />
               <div className="flex items-center gap-2 text-xs text-gray-500 mt-6">
                 <span>SKU: {product.id}</span>

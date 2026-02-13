@@ -13,7 +13,7 @@ import { MdErrorOutline } from "react-icons/md";
 type Product = {
   id: number;
   name: string;
-  price: string;
+  price: number;
   image: string;
   category: string;
 };
@@ -192,7 +192,7 @@ const HomePage = () => {
                     </h3>
                     <div className="flex items-center justify-between">
                       <span className="text-2xl font-bold text-blue-600">
-                        {parseFloat(product.price).toLocaleString("es-AR", {
+                        {(product.price / 100).toLocaleString("es-AR", {
                           style: "currency",
                           currency: "ARS",
                           minimumFractionDigits: 2,

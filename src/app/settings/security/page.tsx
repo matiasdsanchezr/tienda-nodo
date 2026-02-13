@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 type FormData = {
   currentPassword?: string;
@@ -17,12 +17,15 @@ const ProfileEditPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    control,
     getValues,
   } = useForm<FormData>();
 
   // Observar si el usuario está intentando cambiar contraseña
-  const currentPassword = watch("currentPassword");
+  const currentPassword = useWatch({
+    control,
+    name: "currentPassword",
+  });
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
