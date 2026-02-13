@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const ProductGetParamsSchema = z.object({
+  id: z.coerce.number({
+    error: "Se requiere el ID del producto que se desea obtener",
+  }),
+});
+
 export const ProductPostSchema = z.object({
   name: z
     .string({ error: "Se requiere un nombre de producto" })

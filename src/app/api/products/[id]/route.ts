@@ -2,7 +2,10 @@ import { Prisma } from "@/app/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getProduct } from "@/lib/services/product";
-import { ProductPatchSchema } from "@/lib/validations/product";
+import {
+  ProductGetParamsSchema,
+  ProductPatchSchema,
+} from "@/lib/validations/product";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod/v4";
@@ -13,7 +16,18 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const product = await getProduct(id);
+
+    const validation = ProductGetParamsSchema.safeParse({ id });
+    if (!validation.success) {
+      return NextResponse.json(
+        { errors: z.treeifyError(validation.error) },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const product = await getProduct(validation.data.id);
     if (product) {
       return NextResponse.json(
         { error: "Producto no encontrado" },
